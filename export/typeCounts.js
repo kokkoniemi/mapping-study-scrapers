@@ -1,4 +1,3 @@
-const db = require("../models");
 const fs = require('fs');
 const utils = require('./utils')
 
@@ -13,7 +12,7 @@ const outputFile = 'typeCounts.csv';
     const yData = yOptions.map(({title}) => ({
         title,
         count: 0,
-    }))
+    }));
 
     // populate array with counts
     await utils.iterateRecordsWith(async (record) => {
@@ -21,17 +20,17 @@ const outputFile = 'typeCounts.csv';
         yOptions.forEach((y) => {
             const index = yData.findIndex(item => item.title === y.title);
             yData[index].count += 1;
-        })
-    })
+        });
+    });
 
     // order array by count
-    yData.sort((a, b) => b.count - a.count)
+    yData.sort((a, b) => b.count - a.count);
     
     // create csv string
-    let output = `${yLabel};${xLabel}\r\n`
+    let output = `${yLabel};${xLabel}\r\n`;
     yData.forEach((y) => {
-        output += `${y.title};${y.count}\r\n`
-    })
+        output += `${y.title};${y.count}\r\n`;
+    });
 
     // write csv file
     fs.writeFile(outputFile, output, 'utf8', function (err) {

@@ -1,13 +1,13 @@
 const fs = require('fs');
 const utils = require('./utils')
 
-const xAttribute = 'Publication year';
-const yAttribute = 'Type of publication';
-const yLabel = 'Type';
-const outputFile = 'yearCounts2.csv';
+const xAttribute = 'Type of publication';
+const yAttribute = 'Research methods';
+const yLabel = 'Method';
+const outputFile = 'methodXType.csv';
 
 (async () => {
-    // create array of objects for years with keys for type of publication
+    // create array of objects for x and y attribute
     const yOptions = await utils.getMappingOptions(yAttribute);
     const xOptions = await utils.getMappingOptions(xAttribute);
     const xData = xOptions.map(({title}) => {
