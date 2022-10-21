@@ -14,7 +14,7 @@ let browser = null;
 
 (async () => {
     try {
-        const url = `https://link.springer.com/search?date-facet-mode=between&facet-start-year=2010&query=%28%22project-based+learning%22++OR++%22project+based+learning%22++OR++pbl+OR++capstone++OR++%22student+project%22++OR++%22student+projects%22++OR++%22team+project%22++OR++%22team+projects%22++OR++%22group+project%22++OR++%22group+projects%22++OR++%22problem-based+learning%22++OR++%22problem+based+learning%22%29++AND++%28%22group+work%22++OR++%22team+work%22++OR++teamwork%29++AND+%28%22computing%22++OR++%22computer+science%22++OR++%22software+engineering%22%29&facet-discipline=%22Education%22&facet-sub-discipline=%22Higher+Education%22&facet-end-year=2020`;
+        const url = `https://link.springer.com/search?date-facet-mode=between&facet-language=%22En%22&query=%28%22project-based+learning%22+OR+%22project+based+learning%22+OR+pbl+OR+capstone+OR+%22student+project%22+OR+%22student+projects%22+OR+%22team+project%22+OR+%22team+projects%22+OR+%22group+project%22+OR+%22group+projects%22+OR+%22problem-based+learning%22+OR+%22problem+based+learning%22%29+AND+%28%22group+work%22+OR+%22team+work%22+OR+teamwork%29+AND+%28%22computing%22+OR+%22computer+science%22+OR+%22software+engineering%22%29&facet-end-year=2021&facet-discipline=%22Education%22&facet-sub-discipline=%22Higher+Education%22&facet-start-year=2020&facet-content-type=%22Article%22`;
 
         browser = await puppeteer.launch({ headless: false });
         let page = await browser.newPage();

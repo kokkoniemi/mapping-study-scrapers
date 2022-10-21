@@ -21,10 +21,10 @@ const { saveRecord } = require("../helpers");
 
     for (const record of records) {
         await saveRecord({
-            title: record.TI,
-            author: record.AF + " | " + record.SO + " " + record.PY + " " + record.JI,
-            abstract: record.AB,
-            url: record.DI ? `https://doi.org/${record.DI}` : record.UT,
+            title: record['Article Title'],
+            author: record['Author Full Names'] + " | " + record['Source Title'] + " " + record['Publication Year'] + " " + record['Journal ISO Abbreviation'],
+            abstract: record['Abstract'],
+            url: record['DOI'] ? `https://doi.org/${record['DOI']}` : record['UT (Unique WOS ID)'],
             alternateUrls: [],
             databases: ["webofscience"]
         }, db, scrape);

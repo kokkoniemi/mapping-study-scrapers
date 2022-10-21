@@ -14,7 +14,7 @@ let scrape = null;
 (async () => {
     let browser = null;
     try {
-        const url = `https://dl.acm.org/action/doSearch?fillQuickSearch=false&field1=AllField&text1=%28%22project-based+learning%22++OR++%22project+based+learning%22++OR++pbl+OR++capstone++OR++%22student+project%22++OR++%22student+projects%22++OR++%22team+project%22++OR++%22team+projects%22++OR++%22group+project%22++OR++%22group+projects%22++OR++%22problem-based+learning%22++OR++%22problem+based+learning%22%29++AND++%28%22group+work%22++OR++%22team+work%22++OR++teamwork%29++AND+%28%22computing%22++OR++%22computer+science%22++OR++%22software+engineering%22%29&AfterMonth=1&AfterYear=2010&BeforeMonth=12&BeforeYear=2020&expand=dl`;
+        const url = `https://dl.acm.org/action/doSearch?AllField=(%22project-based+learning%22+OR+%22project+based+learning%22+OR+pbl+OR+capstone+OR+%22student+project%22+OR+%22student+projects%22+OR+%22team+project%22+OR+%22team+projects%22+OR+%22group+project%22+OR+%22group+projects%22+OR+%22problem-based+learning%22+OR+%22problem+based+learning%22)+AND+(%22group+work%22++OR+%22team+work%22+OR+teamwork)+AND+(%22computing%22+OR+%22computer+science%22+OR+%22software+engineering%22)&AfterYear=2020&BeforeYear=2021&queryID=30/4471114386`;
         // initialize a scrape log
         scrape = await db.Import.create({
             database: "acm",
@@ -49,11 +49,13 @@ async function processPage(page) {
     await page.waitForSelector(".search__item", { timeout: 0 });
 
     let res = await page.evaluate(() => {
+        console.log(document);
         const resNode = document.querySelector(".items-results");
-        const pageNodes = resNode.querySelectorAll(".search__item");
+        const pageNodes = resNode.querySelectorAll(".issue-item-container");
         const pageResults = [];
         for (let i = 0; i < pageNodes.length; i++) {
             const node = pageNodes[i];
+            console.log(node);
             const titleNode = node.querySelector("h5.issue-item__title");
             const url = new URL("https://dl.acm.org" + titleNode.querySelector("a").getAttribute("href"));
             const authorNode = node.querySelector(".rlist--inline");

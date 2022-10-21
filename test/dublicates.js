@@ -8,6 +8,9 @@ const fs = require('fs');
         const record = await db.Record.findOne({
             offset: i,
         });
+        if (record.status !== 'included' || record.deletedAt !== null) {
+            continue;
+        }
         const title = record.title.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
         if (!countByTitles[title]) {
             countByTitles[title] = [];

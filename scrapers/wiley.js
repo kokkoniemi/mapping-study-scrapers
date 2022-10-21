@@ -2,19 +2,19 @@ const puppeteer = require("puppeteer-extra");
 const chalk = require("chalk");
 const db = require("../models");
 const { saveRecord } = require("../helpers");
-// const StealthPlugin = require("puppeteer-extra-plugin-stealth");
+const StealthPlugin = require("puppeteer-extra-plugin-stealth");
 
 const error = chalk.bold.red;
 const success = chalk.keyword("green");
 
-// puppeteer.use(StealthPlugin());
+puppeteer.use(StealthPlugin());
 
 let scrape = null;
 let browser = null;
 
 (async () => {
     try {
-        const url = `https://onlinelibrary.wiley.com/action/doSearch?AfterMonth=1&AfterYear=2010&BeforeMonth=12&BeforeYear=2020&ConceptID=48&Ppub=&PubType=journal&field1=AllField&field2=AllField&field3=AllField&pageSize=100&text1=%28%22project-based+learning%22++OR++%22project+based+learning%22++OR++pbl+OR++capstone++OR++%22student+project%22++OR++%22student+projects%22++OR++%22team+project%22++OR++%22team+projects%22++OR++%22group+project%22++OR++%22group+projects%22++OR++%22problem-based+learning%22++OR++%22problem+based+learning%22%29++AND++%28%22group+work%22++OR++%22team+work%22++OR++teamwork%29++AND+%28%22computing%22++OR++%22computer+science%22++OR++%22software+engineering%22%29&text2=&text3=&startPage=&target=default&content=articlesChapters`;
+        const url = `https://onlinelibrary.wiley.com/action/doSearch?AfterYear=2020&AllField=%28%22project-based+learning%22+OR+%22project+based+learning%22+OR+pbl+OR+capstone+OR+%22student+project%22+OR+%22student+projects%22+OR+%22team+project%22+OR+%22team+projects%22+OR+%22group+project%22+OR+%22group+projects%22+OR+%22problem-based+learning%22+OR+%22problem+based+learning%22%29+AND+%28%22group+work%22+OR+%22team+work%22+OR+teamwork%29+AND+%28%22computing%22+OR+%22computer+science%22+OR+%22software+engineering%22%29&BeforeYear=2021&content=articlesChapters&target=default&startPage=&rel=nofollow&PubType=journal`;
 
         browser = await puppeteer.launch({ headless: false });
         let page = await browser.newPage();

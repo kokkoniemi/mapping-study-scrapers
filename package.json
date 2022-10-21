@@ -11,13 +11,14 @@
     "url": "git@github.com-kokkoniemi:kokkoniemi/mapping-study-scrapers.git"
   },
   "dependencies": {
+    "chalk": "^4.1.2",
+    "csv-parse": "^4.9.0",
+    "date-fns": "^2.15.0",
     "puppeteer": "^3.0.1",
     "puppeteer-extra": "^3.1.9",
     "puppeteer-extra-plugin-stealth": "^2.4.9",
-    "csv-parse": "^4.9.0",
     "sequelize": "^5.21.7",
-    "sqlite3": "^4.1.1",
-    "date-fns": "^2.15.0"
+    "sqlite3": "^4.1.1"
   },
   "author": "",
   "license": "ISC"

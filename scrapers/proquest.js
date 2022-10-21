@@ -4,10 +4,10 @@ const db = require("../models");
 const { saveRecord } = require("../helpers");
 
 (async () => {
-    const input = fs.readFileSync(__dirname + '/ProQuestDocuments-2020-05-14.csv', 'utf-8');
+    const input = fs.readFileSync(__dirname + '/ProQuestDocuments-2022-05-08.csv', 'utf-8');
     let scrape = await db.Import.create({
         database: "proquest",
-        query: '/ProQuestDocuments-2020-05-14.csv',
+        query: '/ProQuestDocuments-2022-05-08.csv',
         total: 0,
         dublicates: 0,
         namesakes: []

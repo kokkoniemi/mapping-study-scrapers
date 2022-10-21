@@ -11,7 +11,7 @@ puppeteer.use(StealthPlugin());
 let scrape = null;
 
 (async () => {
-    const url = `https://www.tandfonline.com/action/doSearch?text1=%28%22project-based+learning%22+OR+%22project+based+learning%22+OR+pbl+OR+capstone+OR+%22student+project%22+OR+%22student+projects%22+OR+%22team+project%22+OR+%22team+projects%22+OR+%22group+project%22+OR+%22group+projects%22+OR+%22problem-based+learning%22+OR+%22problem+based+learning%22%29+AND+%28%22group+work%22+OR+%22team+work%22+OR+teamwork%29+AND+%28%22computing%22+OR+%22computer+science%22+OR+%22software+engineering%22%29&ConceptID=4261&ConceptID=4451&AfterYear=2010&BeforeYear=2020`;
+    const url = `https://www.tandfonline.com/action/doSearch?AllField=(%22project-based%20learning%22%20%20OR%20%20%22project%20based%20learning%22%20%20OR%20%20pbl%20OR%20%20capstone%20%20OR%20%20%22student%20project%22%20%20OR%20%20%22student%20projects%22%20%20OR%20%20%22team%20project%22%20%20OR%20%20%22team%20projects%22%20%20OR%20%20%22group%20project%22%20%20OR%20%20%22group%20projects%22%20%20OR%20%20%22problem-based%20learning%22%20%20OR%20%20%22problem%20based%20learning%22)%20%20AND%20%20(%22group%20work%22%20%20OR%20%20%22team%20work%22%20%20OR%20%20teamwork)%20%20AND%20(%22computing%22%20%20OR%20%20%22computer%20science%22%20%20OR%20%20%22software%20engineering%22)&ConceptID=4451&content=standard&target=default&queryID=1%2F4222175970&AfterYear=2020&BeforeYear=2021`;
     scrape = await db.Import.create({
         database: "tandfonline",
         query: url,

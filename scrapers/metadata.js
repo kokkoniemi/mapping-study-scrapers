@@ -1,12 +1,12 @@
 const puppeteer = require("puppeteer-extra");
 const chalk = require("chalk");
 const db = require("../models");
-// const StealthPlugin = require("puppeteer-extra-plugin-stealth");
+//const StealthPlugin = require("puppeteer-extra-plugin-stealth");
 
 const error = chalk.bold.red;
 const success = chalk.keyword("green");
 
-// puppeteer.use(StealthPlugin());
+//puppeteer.use(StealthPlugin());
 
 const scrapePublication = async (record, url, page) => {
     if (record.Publication === null && !!record.url) {
@@ -92,17 +92,18 @@ const scrapeAbstract = async (record, url, page) => {
         let page = await browser.newPage();
 
         let rowCount = await db.Record.count({});
-        for (let i = 0; i < rowCount; i++) {
+        for (let i = 6282; i < rowCount; i++) {
             const record = await db.Record.findOne({
                 offset: i,
-                include: 'Publication'
+                include: 'Publication',
             });
             if (!record) {
                 continue;
             }
             let url = new URL(record.url);
 
-            if (record.status === "included" || record.status === "uncertain") {
+            if (!record.status) {
+            //if (record.status === "included" || record.status === "uncertain") {
                 if (url.host === "doi.org") {
                     await page.waitFor(2000);
                     await page.goto(url.href, {
@@ -115,8 +116,8 @@ const scrapeAbstract = async (record, url, page) => {
                     });
                     url = new URL(newUrl);
                 }
-                // await scrapeAbstract(record, url, page);
-                await scrapePublication(record, url, page);
+                await scrapeAbstract(record, url, page);
+                //await scrapePublication(record, url, page);
             }
         }
         await browser.close();
@@ -129,18 +130,23 @@ const scrapeAbstract = async (record, url, page) => {
 })();
 
 async function scrapeIEEE(page, url) {
-    await page.goto(url.href, {
-        waitUntil: "domcontentloaded",
-        timeout: 0,
-    });
-    const waitTime = 500 + Math.floor(Math.random() * Math.floor(2000)); // To look like a human behaviour
-    await page.waitFor(waitTime);
-    await page.waitForSelector(".abstract-text", { timeout: 0 });
-    const res = await page.evaluate(() => {
-        const resNode = document.querySelector(".abstract-text");
-        return resNode.innerText;
-    });
-    return res;
+    try {
+        await page.goto(url.href, {
+            waitUntil: "domcontentloaded",
+            timeout: 5000,
+        });
+        const waitTime = 500 + Math.floor(Math.random() * Math.floor(2000)); // To look like a human behaviour
+        await page.waitFor(waitTime);
+        await page.waitForSelector(".abstract-text", { timeout: 5000 });
+        const res = await page.evaluate(() => {
+            const resNode = document.querySelector(".abstract-text");
+            return resNode.innerText;
+        });
+        return res;
+    }
+    catch (e) {
+        return null;
+    }
 }
 
 async function scrapeScienceDirect(page, url) {
@@ -268,11 +274,15 @@ async function scrapeWiley(page, url) {
             return resNode.innerText;
         });
     } catch (err) {
-        await page.waitForSelector(".article__body", { timeout: 5000 });
-        res = await page.evaluate(() => {
-            const resNode = document.querySelector(".article__body");
-            return resNode.innerText;
-        });
+        try {
+            await page.waitForSelector(".article__body", { timeout: 5000 });
+            res = await page.evaluate(() => {
+                const resNode = document.querySelector(".article__body");
+                return resNode.innerText;
+            });
+        } catch (err) {
+            return null
+        }
     }
 
     return res;

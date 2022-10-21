@@ -17,7 +17,7 @@ const { saveRecord } = require("../helpers");
     const records = parse(input, {
         columns: true,
         skip_empty_lines: true,
-        delimiter: ';'
+        delimiter: ','
     });
 
     for (const record of records) {
