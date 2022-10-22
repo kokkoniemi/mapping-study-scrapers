@@ -1,9 +1,9 @@
 const utils = require('./utils')
 
 const xVariable = 'Type of publication';
-const yVariable = 'Research methods';
-const yLabel = 'Method';
-const outputFileName = 'methodXType.csv';
+const yVariable = 'Group work domains';
+const yLabel = 'Domain';
+const outputFileName = 'domainXType.csv';
 
 (async () => {
     await utils.createCsvForTwoVariables({
