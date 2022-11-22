@@ -4,7 +4,7 @@ const xVariable = 'Group work domains';
 const yVariable = 'Theoretical frameworks used';
 const xLabel = 'Domain';
 const yLabel = 'Framework';
-const outputFileName = 'frameworkXdomain.csv';
+const outputFileName = 'frameworkXDomain.csv';
 
 (async () => {
     await utils.createCsvForTwoVariablesCount({

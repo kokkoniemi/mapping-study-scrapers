@@ -1,6 +1,26 @@
 const fs = require('fs');
 const db = require("../models");
 
+const SORT_BY_VOLUME = 'sortByVolume'
+
+const sanitize = (input, capitalize = false) => {
+    if (!isNaN(input)) {
+        return +input
+    }
+
+    let res = input
+    .trim()
+    .replaceAll("&", "\\&")
+    .replaceAll(/[“”‘’]/g,"'")
+    .replace(/\s{2,}/g, ' ')
+
+    if (capitalize) {
+        res = res.charAt(0).toUpperCase() + res.toLowerCase().slice(1);
+    }
+
+    return res
+}
+
 const iterateRecordsWith = async (fn) => {
     const countRecords = await db.Record.count();
     for (let i = 0; i < countRecords; i++) {
@@ -50,13 +70,40 @@ const getDataForTwoVariables = async ({xVariable, yVariable}) => {
     return {data, xOptions, yOptions}
 }
 
-const createCsvForTwoVariables = async ({xVariable, yVariable, yLabel, outputFileName}) => {
+const createCsvForTwoVariables = async ({xVariable, yVariable, yLabel, outputFileName, sort = null, capitalize = false}) => {
     const {data, yOptions} = await getDataForTwoVariables({xVariable, yVariable})
+    
+    // filter function for unused attributes
+    const optionIsUsed = (option) => {
+        for (let dataItem of data) {
+            if (dataItem[option.title] > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const sortOptionByVolume = (a, b) => {
+        let aCount = 0;
+        let bCount = 0;
+        for (const dataItem of data) {
+            aCount += dataItem[a.title];
+            bCount += dataItem[b.title];
+        }
+
+        return bCount - aCount;
+    }
+
+    if (sort === SORT_BY_VOLUME) {
+        yOptions.sort(sortOptionByVolume)
+    }
 
     // create csv string
-    let output = `${yLabel};${data.map(item => item.title).join(';')}\r\n`;
+    let output = `${sanitize(yLabel)};${data.map(item => sanitize(item.title)).join(';')}\r\n`;
     yOptions.forEach((y) => {
-        output += `${y.title};${data.map(item => item[y.title]).join(';')}\r\n`;
+        if (optionIsUsed(y)) {
+            output += `${sanitize(y.title, capitalize)};${data.map(item => sanitize(item[y.title], capitalize)).join(';')}\r\n`;
+        }
     })
 
     // write csv file
@@ -67,7 +114,7 @@ const createCsvForTwoVariables = async ({xVariable, yVariable, yLabel, outputFil
     });
 }
 
-const createCsvForVariableCount = async ({attribute, yLabel, xLabel, outputFileName}) => {
+const createCsvForVariableCount = async ({attribute, yLabel, xLabel, outputFileName, capitalize = false}) => {
     // create array of objects for different variable values
     const options = await getMappingOptions(attribute);
     const data = options.map(({title}) => ({
@@ -88,9 +135,9 @@ const createCsvForVariableCount = async ({attribute, yLabel, xLabel, outputFileN
     data.sort((a, b) => b.count - a.count);
     
     // create csv string
-    let output = `${yLabel};${xLabel}\r\n`;
+    let output = `${sanitize(yLabel)};${sanitize(xLabel)}\r\n`;
     data.filter(item => item.count > 0).forEach((y) => {
-        output += `${y.title};${y.count}\r\n`;
+        output += `${sanitize(y.title, capitalize)};${sanitize(y.count)}\r\n`;
     });
 
     // write csv file
@@ -101,7 +148,7 @@ const createCsvForVariableCount = async ({attribute, yLabel, xLabel, outputFileN
     });
 }
 
-const createCsvForTwoVariablesCount = async ({xVariable, yVariable, xLabel, yLabel, outputFileName}) => {
+const createCsvForTwoVariablesCount = async ({xVariable, yVariable, xLabel, yLabel, outputFileName, capitalize}) => {
     // create empty array of objects for variables
     const yOptions = await getMappingOptions(yVariable);
     const xOptions = await getMappingOptions(xVariable);
@@ -136,12 +183,14 @@ const createCsvForTwoVariablesCount = async ({xVariable, yVariable, xLabel, yLab
         return false;
     }
 
+    data.sort((a, b) => `${b.title}`.localeCompare(`${a.title}`))
+
     // create csv string
-    let output = `${yLabel};${xLabel};Cnt\r\n`;
+    let output = `${sanitize(yLabel)};${sanitize(xLabel)};Cnt\r\n`;
     data.filter(hasUnusedAttributes).forEach((item) => {
         for(let x of xOptions) {
             if (item[x.title] > 0) {
-                output += `${item.title.replaceAll("&", "\\&")};${x.title.replaceAll("&", "\\&")};${item[x.title]}\r\n`;
+                output += `${sanitize(item.title, capitalize)};${sanitize(x.title, capitalize)};${sanitize(item[x.title], capitalize)}\r\n`;
             }
         }
     });
@@ -161,4 +210,6 @@ module.exports = {
     createCsvForTwoVariables,
     createCsvForVariableCount,
     createCsvForTwoVariablesCount,
+    sanitize,
+    SORT_BY_VOLUME
 }

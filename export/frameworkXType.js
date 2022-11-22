@@ -10,6 +10,7 @@ const outputFileName = 'frameworkXType.csv';
         xVariable,
         yVariable,
         yLabel,
-        outputFileName
+        outputFileName,
+        sort: utils.SORT_BY_VOLUME,
     });
 })();
