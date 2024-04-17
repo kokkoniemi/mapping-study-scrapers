@@ -1,7 +1,7 @@
 {
   "development": {
     "dialect": "sqlite",
-    "storage": "/Users/koksu/Documents/gradu/group-edu-frameworks/data/database-peer-reviewed.sqlite3",
+    "storage": "/Users/mikko/repo/db.sqlite3",
     "logging": false
   },
   "test": {
@@ -10,7 +10,7 @@
   },
   "production": {
     "dialect": "sqlite",
-    "storage": "/Users/koksu/Documents/gradu/group-edu-frameworks/data/database-peer-reviewed.sqlite3",
+    "storage": "/Users/mikko/repo/db.sqlite3",
     "logging": false
   }
 }

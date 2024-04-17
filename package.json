@@ -15,11 +15,11 @@
     "chalk": "^4.1.2",
     "csv-parse": "^4.9.0",
     "date-fns": "^2.15.0",
-    "puppeteer": "^3.0.1",
-    "puppeteer-extra": "^3.1.9",
-    "puppeteer-extra-plugin-stealth": "^2.4.9",
-    "sequelize": "^5.21.7",
-    "sqlite3": "^4.1.1"
+    "puppeteer": "^22.6.5",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "sequelize": "^6.37.3",
+    "sqlite3": "^5.1.7"
   },
   "author": "",
   "license": "ISC",
